@@ -41,7 +41,6 @@ height: 90%;
 export const Postbutton = styled.button`
 float: right;
 `
-<<<<<<< HEAD
 const OPTIONS = [
   { id: 1, value: "tags", name: "태그 선택" },
   { id: 2, value: "mountain", name: "산", post_id: "1" },
@@ -74,9 +73,6 @@ const SelectBox = (props) => {
       </select>
   );
 };
-=======
-
->>>>>>> 717db814db614c225d655999bd6030a5901594d3
 
 export default function Myboard(props){
 console.log(props.userinfo)

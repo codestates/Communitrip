@@ -51,20 +51,9 @@ export default function Create_post(props) {
   const [coordinate, setCoordinate] = useState("");
   const [tagName, setTagName] = useState('태그');
   const userId = props.userinfo.id
-<<<<<<< HEAD
   const navigate= useNavigate();
 
 
-=======
-  const inputRef = useRef();
-  const navigate = useNavigate();
-
-  const handleImage = (e) => {
-    console.log(e.target.files)
-    inputRef.current.click()
-  }
-  
->>>>>>> 717db814db614c225d655999bd6030a5901594d3
   const handleTags = (e) => {
     setTagName(e.name)
     const tagId = e.id
@@ -74,34 +63,14 @@ export default function Create_post(props) {
     })
     console.log(postInfo)
   }
-<<<<<<< HEAD
 
   
-=======
-  
-  const preview = (fileBlob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileBlob);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        const img = reader.result;
-        console.log(img)
-        setImageSrc(reader.result);
-        setpostInfo((e) => {
-          return { ...e, image: img }
-        })
-        resolve();
-      };
-    });
-  };
->>>>>>> 717db814db614c225d655999bd6030a5901594d3
 
   const handlePostInfo = (key) => (e) => {
     setpostInfo({ ...postInfo, [key]: e.target.value });
   }
 
   const handlesucces = () => {
-<<<<<<< HEAD
     if(postInfo.user_id !== '' 
     && postInfo.contents !== '' 
     && postInfo.title !== '' 
@@ -109,15 +78,6 @@ export default function Create_post(props) {
     // && postInfo.image !== '' 
     && postInfo.longitude !== '' 
     && postInfo.latitude !== ''
-=======
-    if (postInfo.user_id !== ''
-      && postInfo.contents !== ''
-      && postInfo.title !== ''
-      && postInfo.tag_id !== ''
-      // && postInfo.image !== '' 
-      // && postInfo.longitude !== '' 
-      // && postInfo.latitude !== ''
->>>>>>> 717db814db614c225d655999bd6030a5901594d3
     ) {
       axios.post(`${process.env.REACT_APP_API_URL}/posts/${userId}`, {
         user_id: postInfo.user_id,
@@ -148,7 +108,6 @@ export default function Create_post(props) {
       </>
       <div>태그선택</div>
       <Dropdownbtn id="dropdown-item-button" title={tagName} >
-<<<<<<< HEAD
       {props.tags?.map(tags => {
         return <Dropdown.Item 
         as="button" 
@@ -171,46 +130,6 @@ export default function Create_post(props) {
       <input type="text" placeholder='글을 작성해주세요' onChange={handlePostInfo('contents')} />
     <div>지도</div>
       <KakaoMap setCoordinate={setCoordinate} setpostInfo={setpostInfo} coordinate={coordinate}/>
-=======
-        {props.tags?.map(tags => {
-          return <Dropdown.Item
-            as="button"
-            key={tags.id}
-            onClick={() => {
-              handleTags(tags)
-            }}
-          >
-            {tags.name}
-          </Dropdown.Item>
-        })}
-      </Dropdownbtn>
-
-      {/* <div>이미지</div>
-    <PreviewDiv>
-      <div className="preview" >
-        {imageSrc && <img src={imageSrc} alt="preview-img" className="previewImg" />}
-      </div>
-    </PreviewDiv>
-    <input
-      ref={inputRef}
-      type="file" 
-      id="real-input" 
-      className="image_inputType_file" 
-      style={{ display: "none" }}
-      accept="image/*" 
-      onChange={(e) => {
-        preview(e.target.files[0]);
-      }}
-      required multiple 
-      />
-    <button className="browse-btn" onClick={handleImage}>
-      사진업로드
-    </button> */}
-      <div>글 작성</div>
-      <input type="text" placeholder='글을 작성해주세요' onChange={handlePostInfo('contents')} />
-      <div>지도</div>
-      {/* <KakaoMap setCoordinate={setCoordinate} setpostInfo={setpostInfo} coordinate={coordinate}/> */}
->>>>>>> 717db814db614c225d655999bd6030a5901594d3
       <button onClick={handlesucces} >작성완료</button>
 
     </div>

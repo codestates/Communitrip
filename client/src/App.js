@@ -59,24 +59,13 @@ z-index: 1011;
 `;
 
 function App() {
-<<<<<<< HEAD
     const navigate = useNavigate();
     const [postsByTags, setPostsByTags] = useState('');
     const [userinfo, setUserinfo] = useState({});
     const [postsinfo, setPostsinfo]=useState()
     const [tags, setTags] = useState()
     const [onepostinfo, setonepostinfo] =useState({});
-=======
-  const navigate = useNavigate();
-  const [userinfo, setUserinfo] = useState({
->>>>>>> 717db814db614c225d655999bd6030a5901594d3
-
-  });
-  const [postsByTags, setPostsByTags] = useState('');
-  const [postsinfo, setPostsinfo] = useState()
-  const [tags, setTags] = useState()
-  const [onepostinfo, setonepostinfo] = useState({});
-
+    
   const isPosts = () => {
     axios.get(`/posts`).then((res) => {
       const test = res.data.data
@@ -183,7 +172,6 @@ function App() {
             <Nav.Link
               onClick={() => {
                 onLoginModalHandler()
-<<<<<<< HEAD
                 }}
               >
                 Login
@@ -226,44 +214,3 @@ function App() {
 }
 
 export default App;
-=======
-              }}
-            >
-              Login
-              {onLoginModal ? <Login /> : null}
-            </Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
-      {isLogout ? <ModalBackdrop onClick={openLogoutHandler}>
-        <ModalView onClick={(event) => { event.stopPropagation() }}>
-          <center>
-            <br />
-            <div>
-              로그아웃 하시겠습니까?
-            </div>
-            <MypageBtn>
-              <ModalBtn onClick={() => { openLogoutHandler(); handleLogout() }}>
-                확인
-              </ModalBtn>
-            </MypageBtn>
-          </center>
-        </ModalView>
-      </ModalBackdrop> : null}
-      <Routes>
-        <Route path="/" element={<Main />} userinfo={userinfo} />
-        <Route path="/mypage" element={<Mypage userinfo={userinfo} handleLogout={handleLogout} />} />
-        <Route path="/login" element={<Login handleResponseSuccess={handleResponseSuccess} />} />
-        <Route path="/edit_profile" element={<Edit_profile userinfo={userinfo} />} />
-        <Route path="/board" element={<Board postsinfo={postsinfo} userinfo={userinfo} onepostinfo={setonepostinfo} postsByTags={postsByTags} setPostsByTags={setPostsByTags} />} />
-        <Route path="/boardpostform" element={<Boardpostform />} />
-        <Route path="/create_post" element={<Create_post userinfo={userinfo} tags={tags} />} />
-        <Route path="/myboard" element={<Myboard userinfo={userinfo} />} />
-        <Route path="/post" element={<Post />} />
-      </Routes>
-    </div>
-  )
-}
-
-export default App;
->>>>>>> 717db814db614c225d655999bd6030a5901594d3

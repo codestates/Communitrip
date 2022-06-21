@@ -1,27 +1,21 @@
-const { tags, posts } = require('../../models')
+const { posts } = require('../../models')
 
 module.exports = (req, res) => {
-    tags.findOne({
+    posts.findAll({
+        attributes: {
+            exclude: ['userId']
+        },
         where: {
-            id: req.params.tagId
+            tag_id: req.params.tagId
         }
-    }).then((result) => {
-        if (!result) {
+    }).then((results) => {
+        if (!results) {
             res.status(400).json({ message: '태그에 맞는 게시글이 없어요' })
         } else {
-            posts.findAll({
-                attributes: {
-                    exclude: ['userId']
-                },
-                where: {
-                    id: result.dataValues.post_id
-                }
-            }).then((results) => {
-                res.json({ results })
-            }).catch((err) => {
-                console.log(err)
-                res.status(500).json({ message: '서버에 문제가 있네요' })
-            })
+            res.json({ results })
         }
+    }).catch((err) => {
+        console.log(err)
+        res.status(500).json({ message: '서버에 문제가 있네요' })
     })
 }

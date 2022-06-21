@@ -1,24 +1,37 @@
 import axios from 'axios';
-import {Dropdown, DropdownButton} from 'react-bootstrap';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 import styled from 'styled-components';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import KakaoMap from '../components/SearchPlace'
+import KakaoMap from '../components/Kakao_Map'
 
 axios.defaults.withCredentials = true;
 
+const maindiv = styled.div`
+display: flex;
+align-items: center;
+`
+
 const TitleInput = styled.input`
   margin: auto;
-  width : 40vw;
-  height : 3vh;
+  width : 20vw;
+  height : 4vh;
+  border-radius: 5px;
   `
+
+const TextInput = styled.textarea`
+  margin: auto;
+  width : 20vw;
+  height : 10vh;
+  border-radius: 5px;
+  resize: none;
+`
 const Dropdownbtn = styled(DropdownButton)`
   #dropdown-item-button{
     width: 9vw;
     height: 4vh;
     line-height: 1rem;
     margin: 20px;
-    fo
   }
   
 `
@@ -35,7 +48,7 @@ const PreviewDiv = styled.div`
     width: 300px;
     height: 300px;
   }
-` 
+`
 
 export default function Create_post(props) {
   const [postInfo, setpostInfo] = useState({
@@ -49,22 +62,30 @@ export default function Create_post(props) {
     longitude: '',
     latitude: '',
   });
+  const [image, setImage] = useState({
+    image_file: "",
+    preview_URL: "",
+  });
   const [coordinate, setCoordinate] = useState("");
   const [tagName, setTagName] = useState('태그');
   const [imageSrc, setImageSrc] = useState('');
+  const [content, setContent] = useState("");
+    const [uploadedImg, setUploadedImg] = useState({
+        fileName: "",
+        fillPath: ""
+    });
+
   const userId = props.userinfo.id
-  const inputRef = useRef();
   const navigate= useNavigate();
-  console.log(userId)
   console.log(props.tags)
   console.log('렌더링...')
-  console.log(coordinate.x)
-  
-  
+
+  const inputRef = useRef();
+
+
   const handleImage = (e) => {
     console.log(e.target.files)
     inputRef.current.click()
-    
   }
 
   const handleTags = (e) => {
@@ -72,12 +93,12 @@ export default function Create_post(props) {
     const tagId = e.id
     setpostInfo((e) => {
       console.log(tagId)
-      return {...e, tag_id: tagId}
+      return { ...e, tag_id: tagId }
     })
-    
+    console.log(postInfo)
   }
-
-  const preview = (fileBlob) => {    
+  
+  const preview = (fileBlob) => {
     const reader = new FileReader();
     reader.readAsDataURL(fileBlob);
     return new Promise((resolve) => {
@@ -85,15 +106,20 @@ export default function Create_post(props) {
         const img = reader.result;
         console.log(img)
         setImageSrc(reader.result);
-        setpostInfo((e) => {
-          return {...e, image: img}
+        setImage({
+          image_file: fileBlob.target.files[0],
+          preview_URL: img
         })
+        setpostInfo((e) => {
+          return { ...e, image: img }
+        })
+        
         resolve();
       };
     });
   };
 
-  const handlePostInfo = (key) =>(e) => {
+  const handlePostInfo = (key) => (e) => {
     setpostInfo({ ...postInfo, [key]: e.target.value });
   }
 
@@ -103,10 +129,10 @@ export default function Create_post(props) {
     && postInfo.title !== '' 
     && postInfo.tag_id !== '' 
     // && postInfo.image !== '' 
-    // && postInfo.longitude !== '' 
-    // && postInfo.latitude !== ''
+    && postInfo.longitude !== '' 
+    && postInfo.latitude !== ''
     ) {
-      axios.post(`http://localhost:8080/posts/${userId}`,{
+      axios.post(`${process.env.REACT_APP_API_URL}/posts/${userId}`, {
         user_id: postInfo.user_id,
         contents: postInfo.contents,
         title: postInfo.title,
@@ -116,27 +142,28 @@ export default function Create_post(props) {
         address: postInfo.address,
         longitude: postInfo.longitude,
         latitude: postInfo.latitude,
+      }, {
+        withCredentials: true
       }).then(
-      navigate('/board')
+        navigate('/board')
       )
-    } 
-  } 
-  console.log(postInfo)
+    }
+  }
+
   return (
     <div>
       <center>
-      <h2>게시글 작성</h2>
-      </center>
+        <h2>게시글 작성</h2>
       <>
         <div>제목</div>
-        <TitleInput  type="text" onChange={handlePostInfo('title')} placeholder='제목을 입력해주세요'  />
+        <TitleInput type="text" onChange={handlePostInfo('title')} placeholder='제목을 입력해주세요' />
       </>
       <div>태그선택</div>
       <Dropdownbtn id="dropdown-item-button" title={tagName} >
       {props.tags?.map(tags => {
         return <Dropdown.Item 
         as="button" 
-        key={tags.id}  
+        key={tags.id}
         onClick={() =>{
           handleTags(tags)
         }}
@@ -145,33 +172,12 @@ export default function Create_post(props) {
         </Dropdown.Item>
       })}
     </Dropdownbtn>
-    {/* <div>이미지</div>
-    <PreviewDiv>
-      <div className="preview" >
-        {imageSrc && <img src={imageSrc} alt="preview-img" className="previewImg" />}
-      </div>
-    </PreviewDiv>
-    <input
-      ref={inputRef}
-      type="file" 
-      id="real-input" 
-      className="image_inputType_file" 
-      style={{ display: "none" }}
-      accept="image/*" 
-      onChange={(e) => {
-        preview(e.target.files[0]);
-      }}
-      required multiple 
-      />
-    <button className="browse-btn" onClick={handleImage}>
-      사진업로드
-    </button> */}
     <div>글 작성</div>
       <input type="text" placeholder='글을 작성해주세요' onChange={handlePostInfo('contents')} />
     <div>지도</div>
-      {/* <KakaoMap setCoordinate={setCoordinate} setpostInfo={setpostInfo} coordinate={coordinate}/> */}
+      <KakaoMap setCoordinate={setCoordinate} setpostInfo={setpostInfo} coordinate={coordinate}/>
       <button onClick={handlesucces} >작성완료</button>
-
+      </center>
     </div>
   )
 }

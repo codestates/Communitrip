@@ -20,6 +20,9 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER
       },
+      tag_id: {
+        type: Sequelize.INTEGER
+      },
       total_likes: {
         type: Sequelize.INTEGER
       },

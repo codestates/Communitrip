@@ -1,4 +1,4 @@
-const { posts, likes } = require('../../models')
+const { posts, likes, sequelize } = require('../../models')
 
 module.exports = (req, res) => {
     likes.findOrCreate({
@@ -6,9 +6,7 @@ module.exports = (req, res) => {
             exclude: ['postId', 'userId']
         },
         where: {
-            user_id: req.body.user_id
-        },
-        defaults: {
+            user_id: req.body.user_id,
             post_id: req.body.post_id
         }
     }).then(([result, created]) => {
@@ -20,9 +18,9 @@ module.exports = (req, res) => {
                 where: {
                     id: req.body.post_id
                 }
-            }).then((result) => {
+            }).then((result2) => {
                 posts.update({
-                    total_likes: result.dataValues.total_likes - 1
+                    total_likes: result2.dataValues.total_likes - 1
                 }, {
                     where: {
                         id: req.body.post_id
@@ -45,15 +43,15 @@ module.exports = (req, res) => {
                 where: {
                     id: req.body.post_id
                 }
-            }).then((result) => {
+            }).then((result2) => {
                 posts.update({
-                    total_likes: result.dataValues.total_likes + 1
+                    total_likes: result2.dataValues.total_likes + 1
                 }, {
                     where: {
                         id: req.body.post_id
                     }
                 }).then(() => {
-                    res.json({ message: '좋아요 개수 증가' })
+                    res.json({ data: [result.user_id, result.id] , message: '좋아요 개수 증가' })
                 })
             })
         }

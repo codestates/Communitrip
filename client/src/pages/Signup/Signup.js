@@ -27,7 +27,6 @@ transform: translate(-50%, -50%);
 }
 `
 
-
 export default function Signup({show, onHide}) {
 
   const [signupInfo, setSignupInfo] = useState({
@@ -81,10 +80,12 @@ export default function Signup({show, onHide}) {
 
   const handleSignup = () => {
     if(signupInfo.email !== '' && signupInfo.password !=='' && signupInfo.name !==''){
-      axios.post('http://localhost:8080/users/signup',{
+      axios.post(`/users/signup`,{
         name:signupInfo.userName,
         email:signupInfo.email,
         password:signupInfo.password,
+      },{
+        withCredentials: true
       })
       
       setErrorMessage('')

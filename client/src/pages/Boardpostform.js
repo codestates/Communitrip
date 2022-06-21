@@ -42,9 +42,7 @@ float: right;
 font-weight: 700;
 `
 
-const changeLikes = () => {
 
-}
 
 export default function Boardpostform({posts}){
 

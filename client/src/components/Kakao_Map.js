@@ -27,7 +27,11 @@ const MapContainer = ({ searchPlace, setCoordinate, setpostInfo, coordinate }) =
         for (let i = 0; i < data.length; i++) {
           displayMarker(data[i]);
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-          setCoordinate(data[i])
+          //setCoordinate(data[i])
+          setpostInfo({
+            longitude: data[i].x,
+            latitude: data[i].y
+          })
           break;
         }
 

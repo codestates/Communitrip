@@ -79,9 +79,11 @@ export default function Login ({ handleResponseSuccess }) {
 
 const responseKaKao = (res) => {
   console.log(res.profile.kakao_account)
-  axios.post('http://localhost:8080/kakao/login',{
+  axios.post(`/kakao/login`,{
         data: res.profile.kakao_account
         
+      },{
+        withCredentials: true
       }).then()
       alert('로그인 성공하였습니다')
       navigate('/')
@@ -115,9 +117,11 @@ const responseKaKao = (res) => {
   const handleLogin = () => {
     
     if(loginInfo.email !=='' && loginInfo.password !== ''){
-      axios.post('http://localhost:8080/users/login',{
+      axios.post(`/users/login`,{
         email: loginInfo.email,
         password: loginInfo.password
+      },{
+        withCredentials: true
       }).then( handleResponseSuccess )
       navigate('/')
       openModalHandler();

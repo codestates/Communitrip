@@ -2,6 +2,9 @@ const { comments } = require('../../models')
 
 module.exports = (req, res) => {
     comments.findAll({
+        attributes: {
+            exclude: ['postId', 'userId']
+        },
         where: {
             post_id: req.params.postId
         }

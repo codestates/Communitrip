@@ -1,10 +1,9 @@
 import React,{ useState, useEffect } from "react";
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import Boardpostform from './Boardpostform';
-
-
+axios.defaults.withCredentials = true;
 
 export const Allpage = styled.div`
 width : 99vw;
@@ -53,7 +52,7 @@ const SelectBox = (props) => {
   const [tags, setTags] = useState('')
 
   const handleTags = (e) => {
-      axios.get(`http://localhost:8080/tags/${e.target.value}`).then((result) => {
+      axios.get(`${process.env.REACT_APP_API_URL}/tags/${e.target.value}`).then((result) => {
           props.setPostsByTags(result)
           console.log(props.postsByTags)
       })
@@ -86,7 +85,7 @@ const navigate = useNavigate();
   const [postsinfo, setPostsinfo]=useState()
   console.log(postsinfo)
   const isPosts =() =>{
-    axios.get('http://localhost:8080/posts').then((res)=>{ 
+    axios.get(`${process.env.REACT_APP_API_URL}/posts`).then((res)=>{ 
     const test = res.data.data    
     setPostsinfo(test)
       }).catch(error =>{

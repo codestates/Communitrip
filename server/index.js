@@ -9,6 +9,7 @@ const multer = require('multer');
 const sharp = require('sharp');
 
 
+
 app.use(cors({
   origin: ['http://communitrip.net.s3-website.ap-northeast-2.amazonaws.com', 'http://communitrip.net', 'http://localhost:3000'],
   credentials: true,
@@ -85,7 +86,7 @@ app.get('/posts/:postId/comments', controllers.getcomments) /** 댓글 갱신 */
 app.patch('/posts/:postId/comments/:commentsId', controllers.patchcomment) /** 댓글 수정 */
 
 app.post('/posts/:postId/likes', controllers.changelikes) /** 좋아요 증가/감소 */
-app.get('/posts/:postId/likes', controllers.getlikes) /** 좋아요 갱신 */
+app.get('/posts/:postId/likes/:userId', controllers.getlikes) /** 좋아요 갱신 */
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`)

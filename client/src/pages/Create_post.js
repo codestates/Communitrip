@@ -1,17 +1,31 @@
 import axios from 'axios';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import styled from 'styled-components';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import KakaoMap from '../components/SearchPlace'
 
 axios.defaults.withCredentials = true;
 
+const maindiv = styled.div`
+display: flex;
+align-items: center;
+`
+
 const TitleInput = styled.input`
   margin: auto;
-  width : 40vw;
-  height : 3vh;
+  width : 20vw;
+  height : 4vh;
+  border-radius: 5px;
   `
+
+const TextInput = styled.textarea`
+  margin: auto;
+  width : 20vw;
+  height : 10vh;
+  border-radius: 5px;
+  resize: none;
+`
 const Dropdownbtn = styled(DropdownButton)`
   #dropdown-item-button{
     width: 9vw;
@@ -38,7 +52,7 @@ const PreviewDiv = styled.div`
 
 export default function Create_post(props) {
   const [postInfo, setpostInfo] = useState({
-    user_id: props.userinfo.id,
+    user_id: `${props.userinfo.id}`,
     contents: '',
     title: '',
     tag_id: '',
@@ -48,10 +62,15 @@ export default function Create_post(props) {
     longitude: '',
     latitude: '',
   });
+
   const [coordinate, setCoordinate] = useState("");
   const [tagName, setTagName] = useState('태그');
+  console.log(coordinate)
+
   const userId = props.userinfo.id
   const navigate= useNavigate();
+  console.log(props.tags)
+  console.log('렌더링...')
 
 
   const handleTags = (e) => {
@@ -61,9 +80,9 @@ export default function Create_post(props) {
       console.log(tagId)
       return { ...e, tag_id: tagId }
     })
-    console.log(postInfo)
+    
   }
-
+  console.log(postInfo)
   
 
   const handlePostInfo = (key) => (e) => {
@@ -71,24 +90,22 @@ export default function Create_post(props) {
   }
 
   const handlesucces = () => {
-    if(postInfo.user_id !== '' 
-    && postInfo.contents !== '' 
+    if(postInfo.contents !== '' 
     && postInfo.title !== '' 
     && postInfo.tag_id !== '' 
     // && postInfo.image !== '' 
-    && postInfo.longitude !== '' 
-    && postInfo.latitude !== ''
+    // && postInfo.longitude !== '' 
+    // && postInfo.latitude !== ''
     ) {
       axios.post(`${process.env.REACT_APP_API_URL}/posts/${userId}`, {
         user_id: postInfo.user_id,
         contents: postInfo.contents,
         title: postInfo.title,
-        tag_id: postInfo.tag_id,
-        total_likes: 0,
-        image: postInfo.image,
+        tag_id: `${postInfo.tag_id}`,
+        total_likes: "0",
         address: postInfo.address,
-        longitude: postInfo.longitude,
-        latitude: postInfo.latitude,
+        longitude: coordinate.longitude,
+        latitude: coordinate.latitude,
       }, {
         withCredentials: true
       }).then(
@@ -101,7 +118,6 @@ export default function Create_post(props) {
     <div>
       <center>
         <h2>게시글 작성</h2>
-      </center>
       <>
         <div>제목</div>
         <TitleInput type="text" onChange={handlePostInfo('title')} placeholder='제목을 입력해주세요' />
@@ -111,7 +127,7 @@ export default function Create_post(props) {
       {props.tags?.map(tags => {
         return <Dropdown.Item 
         as="button" 
-        key={tags.id}  
+        key={tags.id}
         onClick={() =>{
           handleTags(tags)
         }}
@@ -120,18 +136,12 @@ export default function Create_post(props) {
         </Dropdown.Item>
       })}
     </Dropdownbtn>
-
-  
-
-
-
-
     <div>글 작성</div>
       <input type="text" placeholder='글을 작성해주세요' onChange={handlePostInfo('contents')} />
     <div>지도</div>
       <KakaoMap setCoordinate={setCoordinate} setpostInfo={setpostInfo} coordinate={coordinate}/>
       <button onClick={handlesucces} >작성완료</button>
-
+      </center>
     </div>
   )
 }

@@ -11,8 +11,6 @@ import Board from './pages/Board';
 import Boardpostform from './pages/Boardpostform';
 import styled from 'styled-components';
 import Myboard from './pages/Myboard';
-import KakaoLogin from './pages/KakaoLogin'
-import Post_edit from './pages/Create_post';
 import Create_post from './pages/Create_post';
 import Post from './pages/Post';
 import Commentsform from './pages/Commentsform'
@@ -57,7 +55,14 @@ padding: 5px;
 transform: translate(-50%, -50%);
 z-index: 1011;
 `;
-
+export const Icon = styled.img`
+width: 50px;
+height: 50px;
+`
+export const LogImg = styled.img`
+width: 3vw;
+height: 5vh;
+`
 function App() {
     const navigate = useNavigate();
     const [postsByTags, setPostsByTags] = useState('');
@@ -67,7 +72,7 @@ function App() {
     const [onepostinfo, setonepostinfo] =useState({});
     
   const isPosts = () => {
-    axios.get(`/posts`).then((res) => {
+    axios.get(`${process.env.REACT_APP_API_URL}/posts`).then((res) => {
       const test = res.data.data
       setPostsinfo(test)
     }).catch(error => {
@@ -75,7 +80,7 @@ function App() {
     })
   }
   const isTags = () => {
-    axios.get(`/tags`).then((res) => {
+    axios.get(`${process.env.REACT_APP_API_URL}/tags`).then((res) => {
       const test = res.data.data
       setTags(test)
     }).catch(error => {
@@ -84,12 +89,13 @@ function App() {
   }
 
   const isAuthenticated = () => {
-    axios.get(`/users/auth`).then((res) => {
+    axios.get(`${process.env.REACT_APP_API_URL}/users/auth`).then((res) => {
 
       if (res.data.data.userInfo !== null) {
         const test = res.data.data.userInfo;
         setUserinfo(test);
         setIsLogin(true);
+        
       }
 
     }).catch(error => {
@@ -135,7 +141,7 @@ function App() {
     <div className="App">
       <Navbar bg="light" variant="light" className="nav">
         <Container>
-          <Navbar.Brand href="/">Logo</Navbar.Brand>
+        <Navbar.Brand href="/"><LogImg src="img/log.png" />Communitrip</Navbar.Brand>
           <Nav className="nav justify-content-end" >
             <Nav.Link
               href="board"
@@ -161,22 +167,22 @@ function App() {
             >
               마이페이지
             </Nav.Link>
-            <Nav.Link
-
-              onClick={() => {
-                openLogoutHandler();
-              }}
-            >
-              Logout
-            </Nav.Link>
-            <Nav.Link
+      {isLogin ===false ?             <Nav.Link
               onClick={() => {
                 onLoginModalHandler()
                 }}
               >
                 Login
                 {onLoginModal ? <Login /> :null}
-              </Nav.Link>
+              </Nav.Link> : <Nav.Link
+
+onClick={() => {
+  openLogoutHandler();
+}}
+>
+Logout
+</Nav.Link> }      
+
             </Nav>
           </Container>
         </Navbar>
@@ -205,7 +211,7 @@ function App() {
     <Route path="/create_post" element={<Create_post userinfo ={userinfo} tags={tags} />} />
     <Route path="/myboard" element={<Myboard userinfo={userinfo} onepostinfo={setonepostinfo} postsByTags={postsByTags} setPostsByTags={setPostsByTags} />} />
     <Route path="/post" element={<Post userinfo={userinfo}/>} />
-    <Route path="/commentsform" element={<Commentsform  />} />
+    <Route path="/commentsform" element={<Commentsform />} />
     <Route path="/editpost" element={<Editpost userinfo={userinfo} tags={tags} />} />
 
 </Routes>

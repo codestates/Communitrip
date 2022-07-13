@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import MapContainer from "./Kakao_Map";
 
-const SearchPlace = ({setCoordinate, setpostInfo, coordinate}) => {
+const SearchPlace = ({setCoordinate, setpostInfo, coordinate, postInfo}) => {
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
+  
 
   const onChange = (e) => {
     setInputText(e.target.value);
@@ -19,11 +20,12 @@ const SearchPlace = ({setCoordinate, setpostInfo, coordinate}) => {
   const handlecoordinate =() => {
     const longitude = coordinate.x;
     const latitude = coordinate.y;
-    setpostInfo((e) => {
+    setCoordinate((e) => {
       return {...e, 
         longitude: longitude, 
         latitude: latitude }
     })
+    
   }
 
   return (
@@ -37,6 +39,7 @@ const SearchPlace = ({setCoordinate, setpostInfo, coordinate}) => {
         />
         <button type="submit" onClick={handlecoordinate}>검색</button>
       </form>
+      
     </>
   );
 };
